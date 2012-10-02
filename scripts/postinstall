@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Prefix all paths with $TARGET
+if [ "$3" == "/" ]; then
+    TARGET=""
+else
+    TARGET="$3"
+fi
+
+# Execute postinstall actions if we're installing on a live system.
+# This is useful for loading launch daemons and agents.
+if [ "$3" == "/" ]; then
+
+    # Run postinstall actions for root.
+    echo "Executing postinstall"
+    # Add commands to execute in system context here.
+
+    # Run postinstall actions for all logged in users.
+    for pid_uid in $(ps -axo pid,uid,args | grep -i "[l]oginwindow.app" | awk '{print $1 "," $2}'); do
+        pid=$(echo $pid_uid | cut -d, -f1)
+        uid=$(echo $pid_uid | cut -d, -f2)
+        # Replace echo with e.g. launchctl load.
+        launchctl bsexec "$pid" chroot -u "$uid" / echo "Executing postinstall for $uid"
+    done
+
+fi
+
+exit 0
