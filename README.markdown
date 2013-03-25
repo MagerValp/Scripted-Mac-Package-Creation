@@ -33,6 +33,6 @@ Copy your payload into "$buildroot", setting modes and ownership as needed:
     cp -rp my_payload/* "$buildroot"
     with_sudo chown -hR root:wheel "$buildroot"
 
-Build package, passing extra args to PackageMaker as needed (e.g. --scripts --info --resources):
+Build package, passing extra args to pkgbuild as needed (e.g. --scripts):
 
     build_pkg --scripts my_install_script_folder
